@@ -547,46 +547,46 @@ const DEFAULT_PLACA = "fotos/placa-default.png";
 // Añade aquí las rutas que quieras; si falta alguna usará DEFAULT_PLACA
 const categoryImages = {
   // Lote 1
-  "Fiestero/a del año": "fotos/fiestero.png",
-  "Borrach@ del año":   "fotos/borracho.png",
-  "Más guarr@ del año": "fotos/guarrete.png",
-  "Viajero/a":          "fotos/viajero.jpg",
-  "Otra categoría":     "fotos/otra.jpg",
+  "Viajero del año": "fotos/viajero.jpeg",
+  "Loco del año":   "fotos/loco.jepg",
+  "Competititvo del año": "fotos/competitivo.jpeg",
+  "Guarrete del año":          "fotos/guarrete.jpeg",
+  "Papi/Mami del año":     "fotos/papi.jpeg",
 
   // Lote 2
-  "Broma del año":             "fotos/broma.png",
-  "Foto del año":              "fotos/foto.png",
-  "Mejor momento del año":     "fotos/m.png",
-  "Meme del año":              "fotos/meme.jpg",
-  "Objeto del año":            "fotos/objeto.jpg",
+  "Meme del año":             "fotos/meme.jpeg",
+  "Brainhot del año":              "fotos/brainhot.jpeg",
+  "Correon del año":     "fotos/correon.jpeg",
+  "Trio del año":              "fotos/trio.jpeg",
+  "Soltero del año":            "fotos/soltero.jpeg",
 
   // Lote 3
-  "Trío del año":                    "fotos/trio.jpg",
-  "Mejor Personaje fuera de JyP":    "fotos/mpersonaje.jpg",
-  "Fiesta del año":                  "fotos/fiesta.jpg",
-  "Autistada del año":               "fotos/autistada.png",
-  "Fail del año":                    "fotos/fail.jpg",
+  "Fiestero del año":                    "fotos/fiestero.jpeg",
+  "El que mejor viste del año":    "fotos/mejorviste.jpeg",
+  "Borracho del año":                  "fotos/borracho.jpeg",
+  "Mejor Personaje fuera de JyP del año":               "fotos/mpersonaje.jpeg",
+  "Peor momento  del año":                    "fotos/p_momento.jpeg",
 
   // Lote 4
   "Mensaje del año":             "fotos/mensaje.jpeg",
-  "Competitivo del año":         "fotos/competitivo.png",
-  "Peor momento del año":        "fotos/peor_m.png",
-  "Papi/Mami del año":           "fotos/papi.jpg",
-  "El que mejor viste del año":  "fotos/mejorviste.png",
+  "Mote del año":         "fotos/mote.jpeg",
+  "Palabra/Frase del año":        "fotos/palabra.jpeg",
+  "Objeto del año":           "fotos/objeto.jpeg",
+  "Baile del año":  "fotos/baile.jpeg",
 
   // Lote 5
-  "Loco del año":          "fotos/loco.jpg",
-  "Mote del año":          "fotos/mote.png",
-  "Revelación del año":    "fotos/revelacion.png",
-  "Decepción del año":     "fotos/decepcion.jpg",
-  "MVP del año":           "fotos/mvp.png",
+  "Autistada del año":          "fotos/autistada.jpeg",
+  "Fail del año":          "fotos/fail.jpeg",
+  "Broma del año":    "fotos/broma.jpeg",
+  "Foto del año":     "fotos/foto.jpeg",
+  "Video del año":           "fotos/video.jpeg",
 
   // Lote 6
-  "Video del año":                "fotos/video.jpg",
-  "Palabra/Frase del año":       "fotos/palabra.jpeg",
-  "Correa del año":              "fotos/correon.png",
-  "Braihot del año":             "fotos/braihot.jpg",
-  "Objeto del año (edición especial)": "fotos/objeto.jpg"
+  "Fiesta del año":                "fotos/fiesta.jpeg",
+  "Mejor momento del año":       "fotos/m_momento.jpeg",
+  "Decepcion del año":              "fotos/decepcion.jpeg",
+  "Revelacion del año":             "fotos/revelacion.jpeg",
+  "MVP del año": "fotos/mvp.jpeg"
 };
 
 function enhanceCategoryHeaders() {
@@ -781,9 +781,13 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Video del año": [
-    { nombre: "La correa de mi primo", video: "videos/correa.mp4", poster: "fotos/fail.jpeg" },
-    { nombre: "Proyecto X", video: "videos/proyecto_x.mp4", poster: "fotos/posters/proyecto_x.jpg" },
-    { nombre: "Feria Abril", video: "videos/feria_abril.mp4", poster: "fotos/posters/feria_abril.jpg" }
+    { nombre: "La correa de mi primo", video: "videos/correa.mp4", poster: "videos/posters/correa.jpeg" },
+    { nombre: "El desfase de Noblejas", video: "videos/juan.mp4", poster: "videos/posters/juan.jpeg" },
+    { nombre: "Castor alimentando a Castor", video: "videos/castor.mp4", poster: "videos/posters/castor.jpeg" },
+    { nombre: "La muerte de Ana Rosa", video: "videos/iker.mp4", poster: "videos/posters/iker.jpeg" },
+    { nombre: "lluvia de conos", video: "videos/conos.mp4", poster: "videos/posters/lluvia.jpeg" },
+    { nombre: "El Vampiricantropo", video: "videos/ines.mp4", poster: "videos/posters/ines.jpeg" },
+    { nombre: "Osito gominola", video: "videos/ivanp.mp4", poster: "videos/posters/ivanp.jpeg" },
   ],
 
   "Foto del año": [
@@ -800,16 +804,43 @@ const NOMINADOS_ESPECIALES = {
   ],
 
   "Mote del año": [
-    { nombre: "Gamepollo", foto: "fotos/mote/marconuria.jpeg" },
+    { nombre: "Gamepollo", foto: "fotos/mote/gamepollo.jpeg" },
     { nombre: "Cafetera", foto: "fotos/mote/cafetera.jpeg" },
-    { nombre: "Pereira", foto: "fotos/mote/marconuria.jpeg" },
+    { nombre: "Pereira", foto: "fotos/mote/pereira.jpeg" },
     { nombre: "Dj ventosa ", foto: "fotos/mote/marconuria.jpeg" },
     { nombre: "Fish and Chips", foto: "fotos/mote/fish.jpeg" },
-    { nombre: "Pajaroto", foto: "fotos/mote/marconuria.jpeg" },
+    { nombre: "Pajaroto", foto: "fotos/mote/pajaroto.jpeg" },
     { nombre: "Fermoro", foto: "fotos/mote/marconuria.jpeg" },
     { nombre: "Gamepollo", foto: "fotos/mote/marconuria.jpeg" },
     { nombre: "Gamepollo", foto: "fotos/mote/marconuria.jpeg" },
     { nombre: "Gamepollo", foto: "fotos/mote/marconuria.jpeg" }
+  ],
+
+    "Fail del año": [
+    { nombre: "Matalascañas", foto: "fotos/fail/matalascañas.jpeg" },
+    { nombre: "Altavoces Proyecto X ", foto: "fotos/fail/Altavoces.jpeg" },
+    { nombre: "Pisos en Alicante", foto: "fotos/fail/alicante.jpeg" },
+    { nombre: "Tele por la ventana ", foto: "fotos/fail/tele.jpeg" },
+    { nombre: "Mesa de Fervico", foto: "fotos/fail/mesa.jpeg" },
+    { nombre: "Caca a Asier", foto: "fotos/fail/caca.jpeg" },
+    { nombre: "muerte de la Chifurgo", foto: "fotos/fail/chifurgo.jpeg" },
+    { nombre: "Sxgarra vacila a Mario", foto: "fotos/fail/jugui.jpeg" },
+    { nombre: "Gamepollo", foto: "fotos/fail/gamepollo.jpeg" },
+    { nombre: "Gamepollo", foto: "fotos/fail/gamepollo.jpeg" },
+  ],
+
+      "Meme del año": [
+    { nombre: "Dario Vascas", foto: "fotos/meme/dario.jpeg" },
+    { nombre: "Palomo", foto: "fotos/meme/palomo.jpeg" },
+    { nombre: "Fer en las tetorras", video: "fotos/meme/fer.mp4", poster: "fotos/meme/fervico.jpeg" },
+    { nombre: "Patata en la alcazaba", foto: "fotos/meme/patata.jpeg" },
+    { nombre: "Ivanp Gustabo", video: "fotos/meme/ivanp.mp4", poster: "fotos/meme/ivanpe.jpeg" },
+    { nombre: "Artupa en cas", foto: "fotos/meme/artupa.jpeg" },
+    { nombre: "pelusa", foto: "fotos/meme/pelusa.jpeg" },
+    { nombre: "8", foto: "fotos/meme/8.jpeg" },
+    { nombre: "Diamantes", foto: "fotos/meme/diamantes.jpeg" },
+
+  
   ]
 };
 
@@ -913,31 +944,54 @@ function closeVideoLightbox() {
   });
 })();
 
-// conectar vídeos de las tarjetas con el lightbox
 function wireLightboxForVideos(scope = document) {
-  // Vídeos en pequeño, con controles nativos
+  // Configuración de los vídeos pequeños
   scope.querySelectorAll('.grid-nominados .nominado video').forEach(v => {
     v.controls = true;
-    v.muted = true;
-    v.playsInline = true;                     // iOS/Android inline
-    v.setAttribute('playsinline', '');        // iOS
-    v.setAttribute('webkit-playsinline', ''); // iOS Safari antiguo
-    v.setAttribute('preload', 'metadata');    // ahorra datos en móvil
+    v.muted = true; // empieza silenciado
+    v.playsInline = true;
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+    v.setAttribute('preload', 'metadata');
+
+    // Cuando el usuario le da al play, activamos el sonido
+    v.addEventListener('play', () => {
+      v.muted = false;
+    });
   });
 
-  // Botón flotante "ver en grande" (abre tu lightbox, NO fullscreen)
+  // Añadir botón de "ver en grande" a cada tarjeta con vídeo
   scope.querySelectorAll('.grid-nominados .nominado').forEach(card => {
     const v = card.querySelector('video');
-    if (!v) return;
-    if (card.querySelector('.btn-expand')) return;
+    if (!v) return; // solo si hay vídeo
+    if (card.querySelector('.btn-expand')) return; // evitar duplicados
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
+    const btn = document.createElement('div');
+btn.className = 'btn-expand';
+btn.setAttribute('role', 'button');   // accesible como botón
+btn.setAttribute('tabindex', '0');    // se puede enfocar con teclado
+btn.title = 'Ver en grande';
+btn.setAttribute('aria-label', 'Ver en grande');
+
     btn.className = 'btn-expand';
     btn.title = 'Ver en grande';
     btn.setAttribute('aria-label', 'Ver en grande');
-    btn.textContent = '⤢';
 
+    // Crear el SVG de lupa
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", "18");
+    svg.setAttribute("height", "18");
+    svg.setAttribute("fill", "currentColor");
+    svg.setAttribute("viewBox", "0 0 16 16");
+
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", "M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z");
+
+    svg.appendChild(path);
+    btn.appendChild(svg);
+
+    // Evento para abrir el lightbox
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       openVideoLightbox(v.currentSrc || v.src, v.getAttribute('poster'));
@@ -946,7 +1000,6 @@ function wireLightboxForVideos(scope = document) {
     card.appendChild(btn);
   });
 }
-
 
 
   // 3) Selección (con máximo por categoría si lo definiste)
@@ -1034,7 +1087,7 @@ const LOTES = [LOTE_1, LOTE_2, LOTE_3, LOTE_4, LOTE_5, LOTE_6];
 //    Cambia este número cuando “publiques” el siguiente lote.
 //    ESTA ES LA LINEA QUE HAY QUE CAMBIAR 
 
-const LOTE_ACTIVO = 4;
+const LOTE_ACTIVO = 2;
 
 // (Opcional) permite probar por URL: ?lote=3
 function getLoteFromQuery() {

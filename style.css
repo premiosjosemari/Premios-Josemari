@@ -759,6 +759,40 @@ footer {
     height: 36px;
     font-size: 24px;
   }
+.btn-expand {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd700;           /* dorado */
+  transition: transform 0.2s ease, color 0.2s ease;
+  z-index: 2;
+}
+
+.btn-expand svg {
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}
+
+.btn-expand:hover {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+.nominado[data-nombre="Palomo"] img {
+  object-position: top; /* por ejemplo, mostrar más la parte superior */
+}
+.nominado {
+  width: 200px;   /* ajusta a tu grid */
+  height: 250px;  /* altura fija para que la imagen se recorte */
+  overflow: hidden; /* oculta lo que sobresalga */
+}
+
+
 }
 
 
