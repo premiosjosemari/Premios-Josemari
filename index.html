@@ -41,6 +41,7 @@
         <button class="btn" onclick="mostrarSeccion('votacion')">Votar</button>
         <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Votación nominados</button>
         <button id="btnResultados" class="btn" onclick="mostrarSeccion('resultados')">Resultados</button>
+        <button class="btn" onclick="mostrarSeccion('tu-votacion')">Tu votación</button>
       </div>
 
       <!-- PERFIL USUARIO -->
@@ -212,7 +213,29 @@ window.addEventListener("DOMContentLoaded", async () => {
 </div>
 </section>
 
-  
+  <section id="tu-votacion" class="seccion" style="display:none;">
+  <h2>Tu votación</h2>
+  <p id="tuVotacion-subtitle" style="opacity:.8;"></p>
+
+  <div id="tuVotacion-contenido">
+    <h3>Votación simple</h3>
+    <div id="tuVotacion-simple"></div>
+
+    <h3 style="margin-top:24px;">Tus nominaciones por categoría</h3>
+    <div id="tuVotacion-nominaciones"></div>
+  </div>
+
+  <div id="tuVotacion-empty" style="display:none; padding:20px; background:#111; border:1px solid #333; border-radius:8px;">
+    Aún no has registrado votos ni nominaciones.
+  </div>
+
+  <div style="margin-top:20px;">
+    <button class="btn" onclick="mostrarSeccion('votacion')">Ir a votar</button>
+    <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Ir a nominaciones</button>
+    <button class="btn" id="tuVotacion-refresh">Refrescar</button>
+  </div>
+</section>
+
 
 <!-- Modal fuera de la sección -->
 <div id="modalParticipante" class="modal">
@@ -538,7 +561,136 @@ if (typeof enhanceCategoryHeaders === 'function') {
   if (seccion === "resultados" && typeof cargarResultados === "function") {
     cargarResultados();
   }
+  if (seccion === "tu-votacion" && typeof cargarTuVotacion === "function") {
+  cargarTuVotacion();
+}
+
 };
+
+// --- TU VOTACIÓN ---
+async function cargarTuVotacion() {
+  const user = localStorage.getItem("usuarioLogueado");
+  const sec  = document.getElementById("tu-votacion");
+  const boxSimple = document.getElementById("tuVotacion-simple");
+  const boxNom    = document.getElementById("tuVotacion-nominaciones");
+  const emptyBox  = document.getElementById("tuVotacion-empty");
+  const subtitle  = document.getElementById("tuVotacion-subtitle");
+
+  if (!sec || !boxSimple || !boxNom || !emptyBox) return;
+
+  // Requiere login
+  if (!user) {
+    subtitle.textContent = "";
+    boxSimple.innerHTML = "";
+    boxNom.innerHTML = "";
+    emptyBox.style.display = "block";
+    emptyBox.textContent = "Debes iniciar sesión para ver tu votación.";
+    mostrarSeccion("login");
+    return;
+  }
+
+  boxSimple.innerHTML = "<p>Cargando…</p>";
+  boxNom.innerHTML = "<p>Cargando…</p>";
+  emptyBox.style.display = "none";
+  subtitle.textContent = `Usuario: ${user}`;
+
+  try {
+    // ---- VOTACIÓN SIMPLE (último voto por categoría) ----
+    const qV = query(collection(db, "votaciones"), where("usuario", "==", user));
+    const snapV = await getDocs(qV);
+
+    // Mapa: categoria -> {voto, timestamp}
+    const ultimosPorCat = {};
+    snapV.forEach(d => {
+      const data = d.data() || {};
+      const cat  = data.categoria || "Sin categoría";
+      const ts   = data.timestamp?.seconds || 0;
+      if (!ultimosPorCat[cat] || ts > ultimosPorCat[cat].ts) {
+        ultimosPorCat[cat] = { voto: data.voto, ts };
+      }
+    });
+
+    if (Object.keys(ultimosPorCat).length === 0) {
+      boxSimple.innerHTML = "<p>No hay votos registrados aún.</p>";
+    } else {
+      const ul = document.createElement("ul");
+      Object.entries(ultimosPorCat)
+        .sort(([a],[b]) => a.localeCompare(b))
+        .forEach(([categoria, {voto}]) => {
+          const li = document.createElement("li");
+          li.textContent = `${categoria}: ${voto}`;
+          ul.appendChild(li);
+        });
+      boxSimple.innerHTML = "";
+      boxSimple.appendChild(ul);
+    }
+
+    // ---- NOMINACIONES (ciclo actual) ----
+    let ciclo = await getCicloActual();
+    const qN = query(
+      collection(db, "nominaciones"),
+      where("usuario", "==", user),
+      where("ciclo", "==", ciclo)
+    );
+    const snapN = await getDocs(qN);
+
+    if (snapN.empty) {
+      boxNom.innerHTML = `<p>No has enviado nominaciones en el ciclo ${ciclo}.</p>`;
+    } else {
+      const frag = document.createDocumentFragment();
+      const porCat = {};
+      snapN.forEach(d => {
+        const data = d.data() || {};
+        const cat  = data.categoria || "Sin categoría";
+        porCat[cat] = Array.isArray(data.nominados) ? data.nominados : [];
+      });
+
+      Object.entries(porCat)
+        .sort(([a],[b]) => a.localeCompare(b))
+        .forEach(([categoria, nominados]) => {
+          const wrap = document.createElement("div");
+          const h4 = document.createElement("h4");
+          h4.textContent = categoria;
+          const ul = document.createElement("ul");
+          (nominados.length ? nominados : ["(sin nombres)"]).forEach(n => {
+            const li = document.createElement("li");
+            li.textContent = n;
+            ul.appendChild(li);
+          });
+          wrap.appendChild(h4);
+          wrap.appendChild(ul);
+          frag.appendChild(wrap);
+        });
+
+      boxNom.innerHTML = "";
+      boxNom.appendChild(frag);
+    }
+
+    // Si no hay nada en ambas
+    const vacioSimple = boxSimple.textContent.includes("No hay votos");
+    const vacioNom    = boxNom.textContent.includes("No has enviado nominaciones");
+    if (vacioSimple && vacioNom) {
+      emptyBox.style.display = "block";
+    } else {
+      emptyBox.style.display = "none";
+    }
+
+  } catch (e) {
+    console.error("Error cargando 'Tu votación':", e);
+    boxSimple.innerHTML = "<p>Error cargando tus votos.</p>";
+    boxNom.innerHTML = "<p>Error cargando tus nominaciones.</p>";
+  }
+}
+
+// Refrescar
+const btnRefresh = document.getElementById("tuVotacion-refresh");
+if (btnRefresh && !btnRefresh.dataset.bound) {
+  btnRefresh.dataset.bound = "1";
+  btnRefresh.addEventListener("click", cargarTuVotacion);
+}
+
+// Llamada al entrar en la sección
+window.cargarTuVotacion = cargarTuVotacion;
 
 // ===== Cabeceras con imagen =====
 // fallback si no pones imagen para una categoría
