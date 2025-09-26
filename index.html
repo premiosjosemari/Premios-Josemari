@@ -727,7 +727,7 @@ const categoryImages = {
   "Baile del año":  "fotos/baile.jpeg",
 
   // Lote 5
-  "Autistada del año":          "fotos/autistada.jpeg",
+  "Autistada del año":          "fotos/autistada.jpg",
   "Fail del año":          "fotos/fail.jpeg",
   "Broma del año":    "fotos/broma.jpeg",
   "Foto del año":     "fotos/foto.jpeg",
@@ -988,7 +988,7 @@ const NOMINADOS_ESPECIALES = {
     { nombre: "Patata en la alcazaba", foto: "fotos/meme/patata.jpeg" },
     { nombre: "Ivanp Gustabo", video: "fotos/meme/ivanp.mp4", poster: "fotos/meme/ivanpe.jpeg" },
     { nombre: "Artupa en cas", foto: "fotos/meme/artupa.jpeg" },
-    { nombre: "pelusa", foto: "fotos/meme/pelusa.jpeg" },
+    { nombre: "Pelusa", foto: "fotos/meme/pelusa.jpeg" },
     { nombre: "8", foto: "fotos/meme/8.jpeg" },
     { nombre: "Diamantes", foto: "fotos/meme/diamantes.jpeg" },
 
@@ -1051,19 +1051,34 @@ lista.forEach(item => {
 // engancha los vídeos de este contenedor al lightbox
 wireLightboxForVideos(contenedor);
 
-function openVideoLightbox(src, poster) {
+function openVideoLightbox({ src, poster, startAt = 0, autoPlay = true, sourceEl = null, wasPlaying = false }) {
   const modal = document.getElementById('videoLightbox');
   const v = document.getElementById('lightboxVideo');
   if (!modal || !v) return;
 
+  // Limpia listeners anteriores
+  v.onloadedmetadata = null;
+  v.oncanplay = null;
+
+  // Configura media
   v.src = src;
   if (poster) v.poster = poster; else v.removeAttribute('poster');
 
+  // Cuando tenga metadatos, salta al mismo segundo
+  v.onloadedmetadata = () => {
+    try { v.currentTime = startAt || 0; } catch {}
+    if (autoPlay) {
+      v.play().catch(() => {});
+    }
+  };
+
+  // Guarda referencia del pequeño para poder restaurar al cerrar
+  v.dataset.restore = sourceEl ? "1" : "";
+  v._sourceEl = sourceEl || null;
+  v._wasPlaying = !!wasPlaying;
+
   modal.hidden = false;
   document.body.style.overflow = 'hidden';
-
-  v.play().catch(() => {});
-
 }
 
 function closeVideoLightbox() {
@@ -1071,9 +1086,21 @@ function closeVideoLightbox() {
   const v = document.getElementById('lightboxVideo');
   if (!modal || !v) return;
 
+  // (Opcional) restaurar al pequeño en el mismo punto
+  const src = v._sourceEl;
+  if (src) {
+    try { src.currentTime = v.currentTime; } catch {}
+    if (v._wasPlaying) {
+      src.play().catch(()=>{});
+    }
+  }
+
   try { v.pause(); } catch {}
   v.removeAttribute('src');
+  v.removeAttribute('poster');
   v.load();
+  v._sourceEl = null;
+  v._wasPlaying = false;
 
   modal.hidden = true;
   document.body.style.overflow = '';
@@ -1081,6 +1108,7 @@ function closeVideoLightbox() {
     document.exitFullscreen().catch(()=>{});
   }
 }
+
 
 // listeners del modal (clic en fondo, botón cerrar, ESC)
 (() => {
@@ -1144,10 +1172,28 @@ btn.setAttribute('aria-label', 'Ver en grande');
     btn.appendChild(svg);
 
     // Evento para abrir el lightbox
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openVideoLightbox(v.currentSrc || v.src, v.getAttribute('poster'));
-    });
+btn.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  const wasPlaying = !v.paused && !v.ended;
+  const t = v.currentTime || 0;
+  const src = v.currentSrc || v.src;
+  const poster = v.getAttribute('poster');
+
+  // 1) Pausa el pequeño
+  try { v.pause(); } catch {}
+
+  // 2) Abre el grande en el mismo punto
+  openVideoLightbox({
+    src,
+    poster,
+    startAt: t,
+    autoPlay: true,
+    sourceEl: v,         // referencia al pequeño
+    wasPlaying           // para saber si debemos reanudar al cerrar
+  });
+});
+
 
     card.appendChild(btn);
   });
@@ -1239,7 +1285,13 @@ const LOTES = [LOTE_1, LOTE_2, LOTE_3, LOTE_4, LOTE_5, LOTE_6];
 //    Cambia este número cuando “publiques” el siguiente lote.
 //    ESTA ES LA LINEA QUE HAY QUE CAMBIAR 
 
-const LOTE_ACTIVO = 2;
+const LOTE_ACTIVO = 1;
+// === LOTE ACTUAL (respeta ?lote=3 en la URL) ===
+window.getLoteActual = function () {
+  const n = Number(new URLSearchParams(location.search).get('lote'));
+  if (Number.isInteger(n) && n >= 1 && n <= LOTES.length) return n;
+  return LOTE_ACTIVO; // tu valor por defecto
+};
 
 // (Opcional) permite probar por URL: ?lote=3
 function getLoteFromQuery() {
@@ -1288,49 +1340,53 @@ function insertarSeparador(texto) {
 function renderNominadosPorLotes() {
   const cont = document.getElementById('votacion-nominados');
 
-  // 1) decide lote activo (query param tiene prioridad al probar)
   let activo = getLoteFromQuery() ?? LOTE_ACTIVO;
 
-  // 2) limpia lo dinámico
   limpiarNominadosDinamicos();
-
-  // 3) pinta SOLO el lote activo
   const lote = LOTES[activo - 1] || [];
   lote.forEach((titulo, i) => addCategoriaBlock(titulo, i));
 
-  // (opcional) mensaje si no es el último
   if (activo < LOTES.length) {
     insertarSeparador(`🔒 Próximamente: Lote ${activo + 1}`);
   }
 
-  // 4) re-aplicar cabeceras con imagen en cada render
-  const section = document.getElementById('votacion-nominados');
-  delete section.dataset.headersEnhanced; // para que no “recuerde” la marca
+  // re-aplica cabeceras si procede
+  if (typeof enhanceCategoryHeaders === 'function') {
+    enhanceCategoryHeaders();
+  }
+
+  // << NUEVO: refrescar estado del botón según el lote que se acaba de pintar
+  if (window.actualizarEstadoBotonNominaciones) {
+    window.actualizarEstadoBotonNominaciones();
+  }
 }
 
 
-async function yaHaEnviadoNominaciones(usuario) {
+
+// ¿ya envió en este ciclo y LOTE?
+async function yaHaEnviadoNominaciones(usuario, lote = window.getLoteActual()) {
   if (!usuario) return false;
   const ciclo = await getCicloActual();
 
-  // Firestore: ¿ya envió en este ciclo?
   const q = query(
     collection(db, "nominaciones"),
     where("usuario", "==", usuario),
-    where("ciclo", "==", ciclo)
+    where("ciclo", "==", ciclo),
+    where("lote", "==", lote) // << clave: por lote
   );
   const snap = await getDocs(q);
   if (!snap.empty) return true;
 
-  // Local (opcional) por usuario+ciclo
-  return localStorage.getItem(`nominacionesEnviadas_${usuario}_${ciclo}`) === "true";
+  // cache local por usuario+ciclo+lote
+  return localStorage.getItem(`nominacionesEnviadas_${usuario}_${ciclo}_L${lote}`) === "true";
 }
 
-async function marcarEnviadoLocal(usuario) {
+async function marcarEnviadoLocal(usuario, lote = window.getLoteActual()) {
   if (!usuario) return;
   const ciclo = await getCicloActual();
-  localStorage.setItem(`nominacionesEnviadas_${usuario}_${ciclo}`, "true");
+  localStorage.setItem(`nominacionesEnviadas_${usuario}_${ciclo}_L${lote}`, "true");
 }
+
 
 // ---------- Botón Enviar todas ----------
 const btnEnviarTodas = document.getElementById('enviarTodasNominaciones');
@@ -1347,15 +1403,11 @@ let enviandoNominaciones = false;
 
 async function onEnviarTodasNominaciones(e) {
   e.preventDefault();
-
-  if (enviandoNominaciones) return;       // ⛔ evita reentrada
+  if (enviandoNominaciones) return;
   enviandoNominaciones = true;
 
   const btn = document.getElementById('enviarTodasNominaciones');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = "Enviando…";
-  }
+  if (btn) { btn.disabled = true; btn.innerText = "Enviando…"; }
 
   try {
     const usuario = localStorage.getItem('usuarioLogueado');
@@ -1365,35 +1417,36 @@ async function onEnviarTodasNominaciones(e) {
       return;
     }
 
-    // Validación como ya tienes…
+    // validación de que hay algo seleccionado en cada categoría del lote
     for (const categoria in nominacionesPorCategoria) {
       if (nominacionesPorCategoria[categoria].length === 0) {
         alert(`Debes seleccionar al menos un nominado en la categoría: ${categoria}`);
         return;
       }
     }
-const ciclo = await getCicloActual();
 
-// ✅ Escritura segura con ID saneado (sin "/")
-for (const categoria in nominacionesPorCategoria) {
-  const id = `${safeIdPart(usuario)}__${safeIdPart(categoria)}__${ciclo}`;
-  await setDoc(doc(db, "nominaciones", id), {
-    usuario,                      // guardamos el nombre original tal cual
-    categoria,                    // idem
-    nominados: nominacionesPorCategoria[categoria],
-    ciclo,
-    fecha: serverTimestamp()
-  });
-}
+    const ciclo = await getCicloActual();
+    const lote  = window.getLoteActual();   // << nuevo
 
+    // Guardar nominaciones: ID incluye lote y campo "lote" en el doc
+    for (const categoria in nominacionesPorCategoria) {
+      const id = `${safeIdPart(usuario)}__${safeIdPart(categoria)}__${ciclo}__L${lote}`;
+      await setDoc(doc(db, "nominaciones", id), {
+        usuario,
+        categoria,
+        nominados: nominacionesPorCategoria[categoria],
+        ciclo,
+        lote,                               // << nuevo
+        fecha: serverTimestamp()
+      });
+    }
 
-
-    await marcarEnviadoLocal(usuario);
+    await marcarEnviadoLocal(usuario, lote); // << ahora con lote
     if (window.actualizarEstadoBotonNominaciones) {
       await window.actualizarEstadoBotonNominaciones();
     }
 
-    alert("¡Todas tus nominaciones han sido registradas!");
+    alert(`¡Tus nominaciones del Lote ${lote} han sido registradas!`);
     document.querySelectorAll('.nominado').forEach(n => n.classList.remove('selected'));
     for (const c in nominacionesPorCategoria) nominacionesPorCategoria[c] = [];
 
@@ -1402,9 +1455,9 @@ for (const categoria in nominacionesPorCategoria) {
     alert("Hubo un error al guardar tus nominaciones.");
   } finally {
     enviandoNominaciones = false;
-
-    }
+    if (btn) { btn.disabled = false; btn.innerText = "Enviar todas las nominaciones"; }
   }
+}
 
 
 
@@ -1413,20 +1466,20 @@ async function actualizarEstadoBotonNominaciones() {
   const btn = document.getElementById('enviarTodasNominaciones');
   if (!btn) return;
 
+  const lote = window.getLoteActual();
+
   if (!usuario) {
     btn.disabled = true;
     btn.innerText = "Inicia sesión para nominar";
     return;
   }
 
-  const enviado = await yaHaEnviadoNominaciones(usuario);
+  const enviado = await yaHaEnviadoNominaciones(usuario, lote);
   btn.disabled = enviado;
   btn.innerText = enviado
-    ? "Ya has enviado tus nominaciones"
-    : "Enviar todas las nominaciones";
+    ? `Ya has enviado tus nominaciones del Lote ${lote}`
+    : `Enviar todas las nominaciones (Lote ${lote})`;
 }
-
-// 👇 importante: exponerla en el global para poder llamarla desde cualquier sitio
 window.actualizarEstadoBotonNominaciones = actualizarEstadoBotonNominaciones;
 
 

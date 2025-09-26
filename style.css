@@ -855,7 +855,35 @@ footer {
 }
 
 }
+/* Ejemplos: mover la imagen dentro del marco */
+.grid-nominados .nominado[data-nombre="Dario Vascas"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
+.grid-nominados .nominado[data-nombre="Palomo"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
+.grid-nominados .nominado[data-nombre="Pelusa"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
 
+.grid-nominados .nominado[data-nombre="Diamantes"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
+
+.grid-nominados .nominado[data-nombre="Artupa en cas"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
+
+.grid-nominados .nominado[data-nombre="Fer en las tetorras"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
+.grid-nominados .nominado[data-nombre="Patata en la alcazaba"] img {
+  object-position: top left;   /* se centra en la esquina superior izquierda */
+}
+
+.grid-nominados .nominado[data-nombre="Ivanp Gustabo"] video {
+  object-position: center top;   /* para vídeos funciona igual */
+}
 
 
 
