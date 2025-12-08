@@ -978,7 +978,7 @@ const LOTES_VOTACION = [LOTE_VOTACION_1, LOTE_VOTACION_2, LOTE_VOTACION_3];
 
 // 👇 Lote activo de la VOTACIÓN FINAL (1, 2 o 3)
 // Cambias este número cuando quieras pasar de lote.
-const LOTE_VOTACION_ACTIVO = 1;
+const LOTE_VOTACION_ACTIVO = 2;
 
 // Devuelve el lote actual de la votación final
 function getLoteVotacionActual() {
