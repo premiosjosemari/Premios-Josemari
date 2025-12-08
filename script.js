@@ -978,7 +978,7 @@ const LOTES_VOTACION = [LOTE_VOTACION_1, LOTE_VOTACION_2, LOTE_VOTACION_3];
 
 // 👇 Lote activo de la VOTACIÓN FINAL (1, 2 o 3)
 // Cambias este número cuando quieras pasar de lote.
-const LOTE_VOTACION_ACTIVO = 2;
+const LOTE_VOTACION_ACTIVO = 1;
 
 // Devuelve el lote actual de la votación final
 function getLoteVotacionActual() {
@@ -2188,8 +2188,9 @@ let _cargandoResultados = false;
 
 async function cargarResultados() {
   const contenedor = document.getElementById('tabla-resultados');
+  if (!contenedor) return;          // 👈 añadido
   if (_cargandoResultados) return;
-  _cargandoResultados = true;
+  _cargandoResultados = true
 
   try {
     contenedor.innerHTML = "<p>Cargando resultados...</p>";
