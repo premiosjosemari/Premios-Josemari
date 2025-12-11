@@ -927,7 +927,7 @@ const CATEGORIAS_VOTACION = {
         { nombre: "La mesa de Fer(Fervico)",   foto: "fotos/fail/mesa.jpeg" },
         { nombre: "Tele por la ventana(Asier)",   foto: "fotos/fail/tele.jpeg" },
         { nombre: "Ivanp contra el tomate(Ivanp)",   foto: "fotos/fail/tomate.jpeg" },
-        { nombre: "Matalascañas",   foto: "fotos/fail/matalascañas.jpeg" },
+        { nombre: "Matalascañas(Marco)",   foto: "fotos/fail/matalascañas.jpeg" },
 
 
     
