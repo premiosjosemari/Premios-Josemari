@@ -1153,7 +1153,8 @@ function pintarVotacion() {
         card.appendChild(btn);
       }
       // 🔍 Botón lupa para IMÁGENES de "Mensaje del año" (votación final)
-      if (!nom.video && categoria === "Mensaje del año" && nom.foto) {
+// 🔍 Botón lupa para IMÁGENES de "Mensaje del año" y "Foto del año" (votación final)
+if (!nom.video && (categoria === "Mensaje del año" || categoria === "Foto del año") && nom.foto) {
         const btnZoom = document.createElement("div");
         btnZoom.className = "btn-zoom";
         btnZoom.setAttribute("role", "button");
@@ -1590,7 +1591,8 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
     contenedor.appendChild(div);
 
     /* Botón lupa SOLO para “Mensaje del año” */
-    if (categoriaNombre === "Mensaje del año" && foto) {
+// 🔍 Botón lupa para IMÁGENES de "Mensaje del año" y "Foto del año" (votación final)
+if (!nom.video && (categoria === "Mensaje del año" || categoria === "Foto del año") && nom.foto) {
       const btn = document.createElement("div");
       btn.className = "btn-zoom";
       btn.setAttribute("role", "button");
@@ -1609,6 +1611,8 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
         "M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"
       );
 
+      
+
       svg.appendChild(path);
       btn.appendChild(svg);
 
@@ -1619,6 +1623,8 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
 
       div.appendChild(btn);
     }
+
+
   });
 
   /* 4) Activar vídeos dentro de esas tarjetas */
