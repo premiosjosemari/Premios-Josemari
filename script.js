@@ -916,16 +916,77 @@ const CATEGORIAS_VOTACION = {
   ],
 
   // LOTE 3
-  "Autistada del año": [],
-  "Fail del año": [],
-  "Broma del año": [],
-  "Foto del año": [],
-  "Video del año": [],
-  "Fiesta del año": [],
-  "Mejor momento del año": [],
-  "Revelación del año": [],
-  "Decepción del año": [],
-  "MVP del año": []
+  "Autistada del año": [
+        { nombre: "Robo de Botellas X",   foto: "fotos/autistada/yoryo.jpeg" },
+        { nombre: "Foto de perfil Fervico(Fervico)",   foto: "fotos/autistada/foto.jpeg" },
+        { nombre: "Ludopatia capibara(Rulas)",   foto: "fotos/autistada/ludopatia.jpeg" },
+        { nombre: "Reformas Poru y enano(Poru y Fervico)",   foto: "fotos/autistada/reformas.jpeg" },
+
+  ],
+  "Fail del año": [
+        { nombre: "La mesa de Fer(Fervico)",   foto: "fotos/fail/mesa.jpeg" },
+        { nombre: "Tele por la ventana(Asier)",   foto: "fotos/fail/tele.jpeg" },
+        { nombre: "Ivanp contra el tomate(Ivanp)",   foto: "fotos/fail/tomate.jpeg" },
+        { nombre: "Matalascañas",   foto: "fotos/fail/matalascañas.jpeg" },
+
+
+    
+  ],
+  "Broma del año": [
+        { nombre: "Oye siri(Lucia)",   foto: "fotos/broma/lucia.jpeg" },
+        { nombre: "Grabaciones de cagada(Mario y Dario)",   foto: "fotos/broma/lab.jpeg" },
+        { nombre: "Patatas contra la cama de Labrada(Rober y Asier)",   foto: "fotos/broma/patata.jpeg" },
+        { nombre: "Lanzamiento de Objetos a la Piscina(Dani, por jugarse la vida)",   foto: "fotos/broma/lanzamiento.jpeg" },
+
+  ],
+  "Foto del año": [
+        { nombre: "Cafeteros(los de la foto)",   foto: "fotos/fotos/peruanos.jpeg" },
+        { nombre: "Beso de Judas(Labrada y Fermoriv)",   foto: "fotos/fotos/ferlab.jpeg" },
+        { nombre: "Porno X(Gamepro y Marco)",   foto: "fotos/fotos/marconuria.jpeg" },
+        { nombre: "Paleto Bob esponja(Iker)",   foto: "fotos/fotos/bob.jpeg" },
+
+  ],
+  "Video del año": [
+    { nombre: "La muerte de Ana Rosa(Iker)", video: "videos/iker.mp4", poster: "videos/posters/iker.jpeg" },
+    { nombre: "Castor alimentando a castor(Mario)", video: "videos/castor.mp4", poster: "videos/posters/castor.jpeg" },
+    { nombre: "Dj Ventosa en acción(Marco y Dani)", video: "videos/marcoNuria.mp4", poster: "videos/posters/marcoNuria.jpeg" },
+    { nombre: "Desfase de Noblejas(Asier y Juan)", video: "videos/juan.mp4", poster: "videos/posters/juan.jpeg" },
+
+  ],
+  "Fiesta del año": [
+        { nombre: "Halloween",   foto: "fotos/fiesta/Hallowen.jpeg" },
+        { nombre: "Proyecto X (Los organizadores)",   foto: "fotos/fiesta/proyecto x.jpeg" },
+        { nombre: "Zurra",   foto: "fotos/fiesta/zurra.jpeg" },
+        { nombre: "Ferias de Ciu",   foto: "fotos/fiesta/ciu.jpeg" },
+
+  ],
+  "Mejor momento del año": [
+        { nombre: "Sala Vip Chino Juan",   foto: "fotos/m_momento/chino.jpeg" },
+        { nombre: "Marco Pagando(Marco)",   foto: "fotos/m_momento/marco.jpeg" },
+        { nombre: "Ivanp vs Rulas(Ivanp y Rulas)",   foto: "fotos/m_momento/ivanp.jpeg" },
+        { nombre: "Carrera con tio borracho",   foto: "fotos/m_momento/carrera.jpeg" },
+
+  ],
+  "Revelación del año": [       
+    { nombre: "Fervico",   foto: "fotos/fervico.jpeg" },
+    { nombre: "Maria",   foto: "fotos/maria.jpeg" },
+    { nombre: "Poru",   foto: "fotos/Poru.jpeg" },
+    { nombre: "Labrada",   foto: "fotos/labrada.jpeg" },
+
+],
+  "Decepción del año": [
+        { nombre: "Manu",   foto: "fotos/manu.jpeg" },
+        { nombre: "Fermo",   foto: "fotos/Fermoriv.jpeg" },
+        { nombre: "Rober",   foto: "fotos/Rober.jpeg" },
+
+  ],
+  "MVP del año": [
+        { nombre: "Iker",   foto: "fotos/iker.jpeg" },
+        { nombre: "Maria",   foto: "fotos/maria.jpeg" },
+        { nombre: "Asier",   foto: "fotos/asieras.jpeg" },
+        { nombre: "Lucia",   foto: "fotos/Lucia.jpeg" },
+
+  ]
 };
 
 
@@ -978,7 +1039,7 @@ const LOTES_VOTACION = [LOTE_VOTACION_1, LOTE_VOTACION_2, LOTE_VOTACION_3];
 
 // 👇 Lote activo de la VOTACIÓN FINAL (1, 2 o 3)
 // Cambias este número cuando quieras pasar de lote.
-const LOTE_VOTACION_ACTIVO = 2;
+const LOTE_VOTACION_ACTIVO = 3;
 
 // Devuelve el lote actual de la votación final
 function getLoteVotacionActual() {
