@@ -977,7 +977,7 @@ const CATEGORIAS_VOTACION = {
   "Decepción del año": [
         { nombre: "Manu",   foto: "fotos/manu.jpeg" },
         { nombre: "Fermo",   foto: "fotos/Fermoriv.jpeg" },
-        { nombre: "Rober",   foto: "fotos/Rober.jpeg" },
+        { nombre: "Rober",   foto: "fotos/rober.jpeg" },
 
   ],
   "MVP del año": [
